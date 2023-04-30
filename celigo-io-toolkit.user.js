@@ -17,7 +17,7 @@ function main_ok (e) {
   const components = parsedURL.pathname.split('/')
   let resource = components[components.length - 2]
   let resourceId
-  if (['connections', 'imports', 'exports', 'flowBuilder'].includes(resource)) {
+  if (['connections', 'imports', 'exports', 'flowBuilder', 'iClients'].includes(resource)) {
     resourceId = components[components.length - 1]
   } else {
     // try integration
