@@ -13,7 +13,7 @@
 
   var parent_div = document.getElementsByClassName('js-issue-title markdown-title')[0]
   var original_pr_title = parent_div.childNodes[0].textContent
-  var reg_exp = /(io|cs)-\d+/gi
+  var reg_exp = /(io|cs|pre)-\d+/gi
   var tickets = original_pr_title.match(reg_exp).map(ticket => {
       var a = document.createElement('a')
       a.appendChild(document.createTextNode(ticket))
