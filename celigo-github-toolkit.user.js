@@ -5,8 +5,10 @@
 // @description  Auto create href links to jira trackers in PR title
 // @author       https://github.com/sachingodishela
 // @match        https://github.com/celigo/*/pull/*
-// @grant        none
+// @grant        GM_openInTab
 // ==/UserScript==
+
+var allJiraLinks = [];
 
 (function () {
 'use strict'
@@ -19,6 +21,7 @@
       a.appendChild(document.createTextNode(ticket))
       a.title = ticket
       a.href = 'https://celigo.atlassian.net/browse/' + ticket
+      allJiraLinks.push(a.href)
       return a
   })
   var occurence = -1
@@ -35,3 +38,14 @@
       }
   })
 })()
+
+
+function main_ok (e) {
+    'use strict';
+    if (e.key !== '`') return
+    console.log('pressed')
+    allJiraLinks?.forEach(url => GM_openInTab(url, { active: true, insert: true, setParent: true }))
+}
+
+
+document.addEventListener('keyup', main_ok, false)
