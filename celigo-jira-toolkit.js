@@ -12,10 +12,10 @@
 function main_ok (e) {
     'use strict';
     if (e.key !== '`') return
-    var regex = /https:\/\/github.com\/celigo\/[A-Za-z0-9\-\/]*\b/g
+    var regex = /https:\/\/github.com\/celigo\/[\w\-]+\/pull\/\d+\b/g
     var entireHTMLSource = document.documentElement.innerHTML
-    var matches = entireHTMLSource.match(regex)
-    matches?.forEach(url => GM_openInTab(url, { active: true, insert: true, setParent: true }))
+    var matches = entireHTMLSource.match(regex).filter((value, index, array) => array.indexOf(value) === index)
+    matches?.forEach(url => GM_openInTab(url + '/files', { active: true, insert: true, setParent: true }))
 }
 
 
