@@ -15,9 +15,10 @@ function main_ok (e) {
   const parsedURL = new URL(document.URL)
   const baseURI = parsedURL.origin
   const components = parsedURL.pathname.split('/')
-  let resource = components[components.length - 2]
-  let resourceId
-  if (!['integrations', 'flows', 'integrationapps'].includes(resource)) {
+  let resourceId = ''
+  let resource = ''
+  if (!['integrations', 'flows', 'integrationapps'].includes(resource) && components[components.length - 1].length === 24) {
+    resource = components[components.length - 2]
     resourceId = components[components.length - 1]
   } else {
     // try integrationapps pattern
@@ -30,18 +31,25 @@ function main_ok (e) {
     }
 
     // try integration
-    if (!resourceId) {
+    if (!resource) {
       for (let i = 0; i < components.length; i++) {
         if (components[i] === 'integrations') {
-          resource = 'integrations'
+          resource = components[i]
           resourceId = components[i + 1]
-          if (resource && resourceId) break; else return
+          break
         }
       }
     }
   }
+
+  console.log('resource', resource)
+  console.log('resourceId', resourceId)
   // mongo id is 24 characters long
-  if (resourceId.length !== 24) return;
+  if (resourceId.length !== 24) {
+    console.log('resourceId is not 24 characters long, length = ', resourceId.length)
+    console.log('Hence skipping opening the resource in JSON view in new tab')
+    return;
+  }
   const urlToBeOpenedInNewTab = baseURI + '/api/' + (resource === 'flowBuilder' ? 'flows' : resource) + '/' + resourceId
   GM_openInTab(urlToBeOpenedInNewTab, { active: true, insert: true, setParent: true })
 }
