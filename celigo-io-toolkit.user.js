@@ -20,12 +20,23 @@ function main_ok (e) {
   if (['connections', 'imports', 'exports', 'flowBuilder', 'iClients'].includes(resource)) {
     resourceId = components[components.length - 1]
   } else {
+    // try integrationapps pattern
+    const integrationAppsIndex = components.indexOf('integrationapps')
+    if (integrationAppsIndex !== -1) {
+      // Pattern: /integrationapps/AppName/IntegrationId/flows/...
+      // We want the IntegrationId which is at index integrationAppsIndex + 2
+      resourceId = components[integrationAppsIndex + 2]
+      resource = 'integrations'
+    }
+
     // try integration
-    for (let i = 0; i < components.length; i++) {
-      if (components[i] === 'integrations') {
-        resource = 'integrations'
-        resourceId = components[i+1]
-        if (resource && resourceId) break; else return
+    if (!resourceId) {
+      for (let i = 0; i < components.length; i++) {
+        if (components[i] === 'integrations') {
+          resource = 'integrations'
+          resourceId = components[i + 1]
+          if (resource && resourceId) break; else return
+        }
       }
     }
   }
