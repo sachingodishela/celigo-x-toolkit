@@ -17,7 +17,7 @@ function main_ok (e) {
   const components = parsedURL.pathname.split('/')
   let resource = components[components.length - 2]
   let resourceId
-  if (['connections', 'imports', 'exports', 'flowBuilder', 'iClients'].includes(resource)) {
+  if (!['integrations', 'flows', 'integrationapps'].includes(resource)) {
     resourceId = components[components.length - 1]
   } else {
     // try integrationapps pattern
@@ -40,6 +40,8 @@ function main_ok (e) {
       }
     }
   }
+  // mongo id is 24 characters long
+  if (resourceId.length !== 24) return;
   const urlToBeOpenedInNewTab = baseURI + '/api/' + (resource === 'flowBuilder' ? 'flows' : resource) + '/' + resourceId
   GM_openInTab(urlToBeOpenedInNewTab, { active: true, insert: true, setParent: true })
 }
